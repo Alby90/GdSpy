@@ -113,10 +113,13 @@ func _create_camera(fov_horiz: float, camera_transform: Array, principal_point: 
 		for j in range(3):  # Assumi che camera_transform abbia 4 colonne
 			transform.basis[i][j] = camera_transform[i][j]
 	# Scambia l'asse X con l'asse Z per adattarlo a Godot
-	var temp = transform.basis[0]  # Salva la colonna X
-	transform.basis[0] = transform.basis[2]  # Z diventa X
-	transform.basis[2] = temp  # X diventa Z
+	#var temp = transform.basis[0]  # Salva la colonna X
+	#transform.basis[0] = transform.basis[2]  # Z diventa X
+	#transform.basis[2] = temp  # X diventa Z
 	camera.transform = transform
+	camera.rotation_edit_mode = Node3D.ROTATION_EDIT_MODE_QUATERNION
+	camera.quaternion.z *= -1 
+	camera.scale.y = -1
 	
 	# Configurazione del background con l'immagine importata
 	var image = Image.new()
@@ -147,6 +150,9 @@ func _create_camera(fov_horiz: float, camera_transform: Array, principal_point: 
 	#exture_rect.rect_min_size = Vector2(1920, 1080)  # Imposta la dimensione secondo le tue necessità
 	canvas_layer.add_child(texture_rect)
 	texture_rect.owner = current_scene
+	#Questo serve ad impostare la trasparenza del immagine nel 
+	var col = Color(1,1,1,0.5)
+	texture_rect.set_modulate(col)
 
 	# Impostazione della risoluzione di rendering
 	var viewport = get_viewport()
